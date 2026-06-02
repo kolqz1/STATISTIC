@@ -75,7 +75,7 @@ df = pd.read_csv(vct_ds)
 # Step 2: Select the level of significance
 sample = df['Average Combat Score']     # <-- df['column_name']
 alpha = 0.05    # Level of significance
-tail = 1     # one-tailed or two-tailed  <--
+tail = 1     # one-tailed or two-tailed  <-- jika H0 '>=' atau '<=' isi 1, jika '=' isi 2
 
 
 n = len(sample)
@@ -95,7 +95,10 @@ print("t_calc = ", round(t_calc, 2))
 print("t_table = ", round(t_table, 2))
 
 # # Step 6: Interpret the result
-if t_calc > t_table:
+if t_calc > t_table:  # <-- tandanya disesuaikan dengan syarat:
+# jika H0 '>=' maka ganti dengan '<' atau
+# jika H0 '<=' maka ganti dengan '>' atau
+# jika H0 '=' maka ganti dengan 'abs(t_calc) >'
     print("H0 is rejected, the mean ACS of VCT player is higher than 200") # <-- tambahkan kesimpulan
 else:
     print("H0 is fail to reject, the mean ACS of VCT player is not higher than 200") # <-- tambahkan kesimpulan
@@ -107,3 +110,5 @@ else:
 # (jika H0: '=' maka tidak usah di isi)
 
 plot_critical_region(t_calc, t_table, dof, tail=tail, direction="right")
+# jika sudah selesai, kirim filenya dengan format 'nomor hipotesa_(H0 berapa)' ke:
+# https://drive.google.com/drive/folders/1DvBSf0U_tMFXIm6-jsvoYLS8aga8xVEu?usp=sharing
