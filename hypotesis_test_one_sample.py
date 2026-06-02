@@ -110,5 +110,5 @@ else:
 # (jika H0: '=' maka tidak usah di isi)
 
 plot_critical_region(t_calc, t_table, dof, tail=tail, direction="right")
-# jika sudah selesai, kirim filenya dengan format 'nomor hipotesa_(H0 berapa)' ke:
+# jika sudah selesai, kirim filenya dengan format 'nomor hipotesa_(H0 berapa).py' ke:
 # https://drive.google.com/drive/folders/1DvBSf0U_tMFXIm6-jsvoYLS8aga8xVEu?usp=sharing
