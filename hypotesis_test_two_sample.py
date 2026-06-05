@@ -59,56 +59,56 @@ def plot_critical_region(t_calc, t_table, dof, tail=1, direction="right"):
     plt.legend()
     plt.grid(True, alpha=0.4)
     plt.show()
-    
+
     
 # hanya input bagian yang ditandai '<--'
 
 vct_ds = "https://raw.githubusercontent.com/kolqz1/STATISTIC/refs/heads/main/dataset%20player%20vct%2025%20cleaned%20-%20player_stats_cleanedd%20(1).csv"
 df = pd.read_csv(vct_ds)
 
-# 1. (Judul Hypotesis) <--
+# 1. Rata-rata ACS pemain sentinel sama dengan pemain controller.
 
 # Step 1: State null and alternate hypotesis
 # H0: μ Duelist <= μ Controller  <--
 # H1: μ Duelist > μ Controller   <--
 
 # Step 2: Select the level of significance
-duelist = df[df['Role'] == 'Duelist'] ['Average Combat Score']     # <-- ddf[df['Category_Collumn'] == 'Category 1'] ['Metrik_cloumn'] dan ganti variabelnya
-controller = df[df['Role'] == 'Controller'] ['Average Combat Score'] # <-- df[df['Category_Collumn'] == 'Category 2'] ['Metrik_cloumn'] dan ganti variabelnya
+Sentinel = df[df['Role'] == 'Sentinel'] ['Average Combat Score']     # <-- ddf[df['Category_Collumn'] == 'Category 1'] ['Metrik_column'] dan ganti variabelnya
+controller = df[df['Role'] == 'Controller'] ['Average Combat Score'] # <-- df[df['Category_Collumn'] == 'Category 2'] ['Metrik_column'] dan ganti variabelnya
 
 alpha = 0.05    # Level of significance
-tail = 1     # one-tailed or two-tailed  <--
+tail = 2     # two-tailed
 
-n_d = len(duelist)
+n_s = len(Sentinel)
 n_c = len(controller)
 
-dof = n_d + n_c - 2
+Xbar_d = Sentinel.mean()
+Xbar_c = controller.mean()
 
-Xbar_d = duelist.mean()    # df[Column_name].mean()
-Xbar_c = controller.mean()  
+s2_s = Sentinel.var()
+s2_c = controller.var()
 
-s2P = ((n_d - 1) * duelist.var() + (n_c - 1) * controller.var()) / dof   # df[Column_name].std(ddof=1)
+dof = n_s + n_c - 2
 
-# # Step 3: Determine the test statistic  <--
+s2P = ((n_s - 1) * s2_s + (n_c - 1) * s2_c) / dof
 
+# Step 3: Determine the test statistic
+# t-test with pooled variance because both standar deviation is unknown but both have the same value.
 
-# # Step 5: Make the decision regarding H0
-t_calc = (Xbar_d - Xbar_c) / np.sqrt(s2P * ((1 / n_d) + (1 / n_c)))
+# Step 4: Formulate the decision rule
+# Reject H0 if |t_calc| > t_table
+
+# Step 5: Make the decision regarding H0
+t_calc = (Xbar_d - Xbar_c) / np.sqrt(s2P * ((1 / n_s) + (1 / n_c)))
 t_table = get_t_table(alpha, tail, dof)
 
 print("t_calc = ", round(t_calc, 2))
 print("t_table = ", round(t_table, 2))
 
 # # Step 6: Interpret the result
-if t_calc > t_table:
-    print("H0 is rejected, the mean ACS of Duelist player are significanly higher than controller player") # <-- tambahkan kesimpulan
+if abs(t_calc) > t_table:
+    print("H0 is rejected, the mean ACS of Sentinel player are not the same as Controller player")
 else:
-    print("H0 is fail to rejected, the mean ACS of Duelist player are not significanly higher than controller player") # <-- tambahkan kesimpulan
-
-
-# plot_critical_region(t_calc, t_table, dof, tail=tail, direction="right")   <-- isi bagian direction dengan:
-# (jika H0: '>=' maka 'right') atau 
-# (jika H0: '<=' maka 'left') atau 
-# (jika H0: '=' maka tidak usah di isi)
+    print("H0 is fail to rejected, the mean ACS of Sentinel player are the same as Controller player")
 
 plot_critical_region(t_calc, t_table, dof, tail=tail, direction="right")
